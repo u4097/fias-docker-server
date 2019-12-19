@@ -1,0 +1,7 @@
+FROM python:3
+RUN apt-get update && apt-get install -y maven
+ENV JAVA_HOME  /usr/lib/jvm/java-11-openjdk-amd64/
+RUN export JAVA_HOME
+RUN  pip install --user fiases 
+#RUN  pip install --user jep
+#FROM maven:3.6.3-jdk-8

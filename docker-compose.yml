@@ -1,0 +1,39 @@
+version: '3'
+services:
+  nginx:
+    image: nginx:1.17.6
+    container_name: nginx-fias 
+    restart: always
+    networks:
+      - es_elastic
+    ports:
+      - 80:80
+      - 433:433
+    volumes:
+     - ./nginx/conf.d:/etc/nginx/conf.d
+
+  fias:
+    container_name: fias-server
+    restart: always
+    build: .
+    image: oleg2019/fias-server
+    working_dir: /app
+    depends_on:
+      - nginx 
+    volumes:
+    - ./fias:/app
+    - maven:/root/.m2
+    expose:
+    - "8080"
+    networks:
+      - es_elastic
+    command: mvn clean spring-boot:run
+
+
+volumes:
+  maven:
+    driver: local
+
+networks:
+  es_elastic:
+      external: true
